@@ -1,0 +1,12 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="giopib.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="FurniMove" Type="System.UInt16" Scope="User">
+      <Value Profile="(Default)">2286</Value>
+    </Setting>
+    <Setting Name="UseFurni" Type="System.UInt16" Scope="User">
+      <Value Profile="(Default)">3395</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>
