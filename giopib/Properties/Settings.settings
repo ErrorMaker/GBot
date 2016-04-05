@@ -8,5 +8,17 @@
     <Setting Name="UseFurni" Type="System.UInt16" Scope="User">
       <Value Profile="(Default)">3395</Value>
     </Setting>
+    <Setting Name="FurniLoad" Type="System.UInt16" Scope="User">
+      <Value Profile="(Default)">1923</Value>
+    </Setting>
+    <Setting Name="Alert" Type="System.UInt16" Scope="User">
+      <Value Profile="(Default)">1337</Value>
+    </Setting>
+    <Setting Name="Rotate" Type="System.UInt16" Scope="User">
+      <Value Profile="(Default)">1338</Value>
+    </Setting>
+    <Setting Name="Rank" Type="System.UInt16" Scope="User">
+      <Value Profile="(Default)">1339</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

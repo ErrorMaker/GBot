@@ -1,6 +1,6 @@
 ﻿namespace giopib
 {
-    partial class Form1
+    partial class Main
     {
         /// <summary>
         /// Required designer variable.
@@ -30,6 +30,8 @@
         {
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.CustomBtn = new System.Windows.Forms.Button();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.label18 = new System.Windows.Forms.Label();
             this.label17 = new System.Windows.Forms.Label();
@@ -102,6 +104,7 @@
             this.label19 = new System.Windows.Forms.Label();
             this.tabControl1.SuspendLayout();
             this.tabPage2.SuspendLayout();
+            this.groupBox3.SuspendLayout();
             this.groupBox4.SuspendLayout();
             this.HeaderBx.SuspendLayout();
             this.StatusBx.SuspendLayout();
@@ -132,6 +135,7 @@
             // 
             // tabPage2
             // 
+            this.tabPage2.Controls.Add(this.groupBox3);
             this.tabPage2.Controls.Add(this.groupBox4);
             this.tabPage2.Controls.Add(this.HeaderBx);
             this.tabPage2.Controls.Add(this.StatusBx);
@@ -182,6 +186,26 @@
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "GBot Main Tab (© Mika)";
             this.tabPage2.UseVisualStyleBackColor = true;
+            // 
+            // groupBox3
+            // 
+            this.groupBox3.Controls.Add(this.CustomBtn);
+            this.groupBox3.Location = new System.Drawing.Point(288, 257);
+            this.groupBox3.Name = "groupBox3";
+            this.groupBox3.Size = new System.Drawing.Size(78, 53);
+            this.groupBox3.TabIndex = 1;
+            this.groupBox3.TabStop = false;
+            this.groupBox3.Text = "Rooms";
+            // 
+            // CustomBtn
+            // 
+            this.CustomBtn.Location = new System.Drawing.Point(6, 19);
+            this.CustomBtn.Name = "CustomBtn";
+            this.CustomBtn.Size = new System.Drawing.Size(66, 23);
+            this.CustomBtn.TabIndex = 0;
+            this.CustomBtn.Text = "Custom";
+            this.CustomBtn.UseVisualStyleBackColor = true;
+            this.CustomBtn.Click += new System.EventHandler(this.CustomBtn_Click);
             // 
             // groupBox4
             // 
@@ -307,6 +331,7 @@
             // CustomHitBx
             // 
             this.CustomHitBx.AutoSize = true;
+            this.CustomHitBx.Enabled = false;
             this.CustomHitBx.Location = new System.Drawing.Point(11, 58);
             this.CustomHitBx.Name = "CustomHitBx";
             this.CustomHitBx.Size = new System.Drawing.Size(60, 17);
@@ -318,6 +343,7 @@
             // LoseBx
             // 
             this.LoseBx.AutoSize = true;
+            this.LoseBx.Enabled = false;
             this.LoseBx.Location = new System.Drawing.Point(11, 39);
             this.LoseBx.Name = "LoseBx";
             this.LoseBx.Size = new System.Drawing.Size(48, 17);
@@ -411,7 +437,7 @@
             this.groupBox1.Controls.Add(this.RoomsBx);
             this.groupBox1.Location = new System.Drawing.Point(6, 257);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(360, 53);
+            this.groupBox1.Size = new System.Drawing.Size(276, 53);
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Rooms";
@@ -422,7 +448,7 @@
             this.RoomsBx.FormattingEnabled = true;
             this.RoomsBx.Location = new System.Drawing.Point(6, 19);
             this.RoomsBx.Name = "RoomsBx";
-            this.RoomsBx.Size = new System.Drawing.Size(348, 21);
+            this.RoomsBx.Size = new System.Drawing.Size(259, 21);
             this.RoomsBx.TabIndex = 0;
             this.RoomsBx.SelectedIndexChanged += new System.EventHandler(this.RoomsBx_SelectedIndexChanged);
             // 
@@ -863,7 +889,7 @@
             this.label19.TabIndex = 15;
             this.label19.Text = "Made by Mika";
             // 
-            // Form1
+            // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -872,11 +898,12 @@
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
-            this.Name = "Form1";
+            this.Name = "Main";
             this.Text = "GBot - Grijpers Owned (© Mika)";
             this.tabControl1.ResumeLayout(false);
             this.tabPage2.ResumeLayout(false);
             this.tabPage2.PerformLayout();
+            this.groupBox3.ResumeLayout(false);
             this.groupBox4.ResumeLayout(false);
             this.HeaderBx.ResumeLayout(false);
             this.HeaderBx.PerformLayout();
@@ -961,7 +988,6 @@
         private System.Windows.Forms.Panel panel30;
         private System.Windows.Forms.Panel panel29;
         private System.Windows.Forms.Panel panel28;
-        private System.Windows.Forms.RadioButton CustomHitBx;
         private System.Windows.Forms.GroupBox HeaderBx;
         private System.Windows.Forms.Label label16;
         private System.Windows.Forms.Label label15;
@@ -974,6 +1000,9 @@
         private System.Windows.Forms.Label label19;
         private System.Windows.Forms.Button CreditsBtn;
         private System.Windows.Forms.CheckBox VisBx;
+        private System.Windows.Forms.GroupBox groupBox3;
+        private System.Windows.Forms.Button CustomBtn;
+        public System.Windows.Forms.RadioButton CustomHitBx;
     }
 }
 

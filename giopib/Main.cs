@@ -8,17 +8,20 @@ using giopib.Properties;
 using Tangine;
 using Sulakore.Modules;
 using Tangine.Habbo;
+using Sulakore.Habbo;
+using Sulakore.Protocol;
 
 namespace giopib
 {
-    [Module("GBot", "Grijpers/grabbers owned!")]
-    [Author("Mika", DonationsUrl = "http://mika.host", HabboName = "ushort", Hotel = Sulakore.Habbo.HHotel.Nl)]
-    [Author("Mika", DonationsUrl = "http://mika.host", HabboName = "BlameHabbo", Hotel = Sulakore.Habbo.HHotel.Com)]
-    [Author("Wes", HabboName = "Weszzz", Hotel = Sulakore.Habbo.HHotel.Com)]
-    [Author("Wes", HabboName = "Nubkoek", Hotel = Sulakore.Habbo.HHotel.Nl)]
+    [Module("GBot 2", "Grijpers/grabbers owned!")]
+    [Author("Mika", ResourceName = "Story behind GBot", ResourceUrl = "http://mika.host/grabber.pdf", HabboName = "ushort", Hotel = HHotel.Nl)]
+    [Author("Mika", ResourceUrl = "http://mika.host", ResourceName = "My Website", HabboName = "BlameHabbo", Hotel = HHotel.Com)]
+    [Author("Wes", ResourceName = "Story behind GBot", ResourceUrl = "http://mika.host/grabber.pdf", HabboName = "Weszzzz", Hotel = HHotel.Com)]
+    [Author("Wes", ResourceName = "Story behind GBot", ResourceUrl = "http://mika.host/grabber.pdf", HabboName = "Nubkoek", Hotel = HHotel.Nl)]
+    [GitHub("ClockDev", "GBot")]
 
 
-    public partial class Form1 : ExtensionForm
+    public partial class Main : ExtensionForm
     {
         #region Variables
         private List<GGame> GGames = new List<GGame>();
@@ -26,6 +29,8 @@ namespace giopib
         private List<Panel> LeftPanels = new List<Panel>();
         private List<Panel> RightPanels = new List<Panel>();
         private List<Panel> HitPanels = new List<Panel>();
+        public static List<Point> Coords = new List<Point>();
+        public Custom CForm { get; set; }
         private int LastBlueLeftPanel = 0;
         private int LastBlueRightPanel = 0;
 
@@ -38,7 +43,7 @@ namespace giopib
         private int YCoord = 0;
         private int XCoord = 0;
 
-        private bool CustomHit = false;
+        public bool CustomHit = false;
         private int CustomX = 0;
         private int CustomY = 0;
         private Panel CustomPanel { get; set; }
@@ -55,20 +60,42 @@ namespace giopib
             Control = 2
         }
 
-        public override void ModifyGame(HGame game)
+        public async void GetHeadersFromGame()
         {
-            //Hi there, this method will only be called if your extension is running while connecting!
-            game.GenerateMessageHashes();
-            var move = game.GetMessages("814e9490db3f636bf970d72e072d7ef1")[0];
-            var click = game.GetMessages("1d783bdbfb54f51403c1f40d931d3043")[0];
-            Settings.Default.FurniMove = game.GetMessageHeader(move);
-            Settings.Default.UseFurni = game.GetMessageHeader(click);
+            var move = Game.GetMessages("814e9490db3f636bf970d72e072d7ef1")[0];
+            var click = Game.GetMessages("1d783bdbfb54f51403c1f40d931d3043")[0];
+            var furniload = Game.GetMessages("540de3e1e0baf1632ce3107fc99780f4")[0];
+            var alert = Game.GetMessages("823973d6a28dcd0da8954c594b62c54b")[0];
+            var rotate = Game.GetMessages("1101e72b4882377d9dc313cfa46d6d3d")[0];
+            var rank = Game.GetMessages("6a1000d94433c253892c267672fc82f6")[0];
+
+         Settings.Default.FurniMove = Game.GetMessageHeader(move);
+            Settings.Default.UseFurni = Game.GetMessageHeader(click);
+            Settings.Default.FurniLoad = Game.GetMessageHeader(furniload);
+            Settings.Default.Alert = Game.GetMessageHeader(alert);
+            Settings.Default.Rotate = Game.GetMessageHeader(rotate);
+            Settings.Default.Rank = Game.GetMessageHeader(rank);
+
             Settings.Default.Save();
             Settings.Default.Reload();
-            HeaderBx.Enabled = false; //You can still manually update as this is only false when headers were extracted from HGame
+
+            Triggers.InAttach(Settings.Default.FurniMove, WiredMoveFurniture);
+
+            HeaderBx.Enabled = false;
             MoveTxt.Text = Settings.Default.FurniMove.ToString();
             UseTxt.Text = Settings.Default.UseFurni.ToString();
-            base.ModifyGame(game);
+
+            HMessage popup = new HMessage(Settings.Default.Alert);
+            popup.WriteString("gbot.welcome_alert");
+            popup.WriteInteger(3);
+            popup.WriteString("image");
+            popup.WriteString("http://i1112.photobucket.com/albums/k495/MiksLawl123/jS6a6Re_zpsqtdg9nj2.png");
+            popup.WriteString("title");
+            popup.WriteString($"GBot - Welcome");
+            popup.WriteString("message");
+            popup.WriteString("<h2><font color=\"#FF0000\">Welcome to GBot!</font></h2><br><br>Hello there fellow scripter! We hope you enjoy using GBot. Have you read the full history about this extension yet? You can view it on <b>http://mika.host/grabber.pdf</b>!<br><br>- <i>Mika & Wes");
+
+            await Connection.SendToClientAsync(popup.ToBytes());
         }
         #endregion
         #region Hotkeys Method
@@ -93,10 +120,12 @@ namespace giopib
         }
         #endregion
 
-        public Form1()
+        public Main()
         {
             InitializeComponent();
 
+            GetHeadersFromGame();
+            CForm = new Custom(this);
             MoveTxt.Text = Settings.Default.FurniMove.ToString();
             UseTxt.Text = Settings.Default.UseFurni.ToString();
 
@@ -118,8 +147,8 @@ namespace giopib
             GGames.Add(gg1);
 
             GGame gg2 = new GGame("Kleinmeisje Left");
-            gg2.LeftID = 164962711;
-            gg2.RightID = 164962709;
+            gg2.LeftID = 200811382;
+            gg2.RightID = 199976535;
             gg2.LeverID = 241971137;
             gg2.XDeviation = 3;
             gg2.YDeviation = 20;
@@ -184,21 +213,29 @@ namespace giopib
         private bool IsHit(int x, int y)
         {
             if (!CustomHit)
-            {
-                if ((x == 2 && y == 1) || (x == 1 && y == 2) || (x == 1 && y == 4) || (x == 4 && y == 1) || (x == 2 && y == 5) || (x == 5 && y == 2) || (x == 3 && y == 3) || (x == 4 && y == 3) || (x == 3 && y == 4) || (x == 3 && y == 6) || (x == 6 && y == 3) || (x == 4 && y == 4) || (x == 5 && y == 6) || (x == 6 && y == 5))
-                {
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
-            }
+                return ((x == 2 && y == 1) || (x == 1 && y == 2) || (x == 1 && y == 4) || (x == 4 && y == 1) || (x == 2 && y == 5) || (x == 5 && y == 2) || (x == 3 && y == 3) || (x == 4 && y == 3) || (x == 3 && y == 4) || (x == 3 && y == 6) || (x == 6 && y == 3) || (x == 4 && y == 4) || (x == 5 && y == 6) || (x == 6 && y == 5));
+
             else
             {
-                if ((x == CustomX && y == CustomY))
-                    return true;
-                else return false;
+                return Coords.Contains(new Point(x, y));
+            }
+        }
+
+        public int PillowCount = 0;
+
+        public void FurnitureMoved(DataInterceptedEventArgs e) //In here, we get ids of moving pillows
+        {
+            int id = e.Packet.ReadInteger();
+            int x = e.Packet.ReadInteger();
+            int y = e.Packet.ReadInteger();
+            e.Packet.ReadInteger();
+            if (Custom.Pillows.Contains(id))
+            {
+                Point newp = new Point(x - XDeviation, y - YDeviation);
+                Point oldp = new Point(1, 1);
+                CForm.UpdatePositions(id, oldp, newp);
+                PillowCount++;
+                CForm.UpdatePercentage(PillowCount);
             }
         }
 
@@ -210,42 +247,66 @@ namespace giopib
             int furniID = args.FurniID;
             int furniDeviatedPosX = 0;
             int furniDeviatedPosY = 0;
-            if (furniID == LeftID)
+
+            if (Custom.Pillows.Contains(furniID))
             {
-                furniDeviatedPosY = furniRealPosY - YDeviation;
-                YCoord = furniDeviatedPosY;
-                MainYLbl.Text = YCoord.ToString();
-                UpdateColors("left", YCoord);
+                Point newp = new Point(furniRealPosX - XDeviation, furniRealPosY - YDeviation);
+                Point oldp = new Point(args.xPos1 - XDeviation, args.yPos1 - YDeviation);
+                if (newp.X < 7 && newp.Y < 7 && oldp.X < 7 && oldp.Y < 7)
+                {
+                    CForm.UpdatePositions(furniID, oldp, newp);
+                    return;
+                }
             }
 
-            if (furniID == RightID)
+            if (Running)
             {
-                furniDeviatedPosX = furniRealPosX - XDeviation;
-                XCoord = furniDeviatedPosX;
-                MainXLbl.Text = XCoord.ToString();
-                UpdateColors("right", XCoord);
-            }
-            if (WinBx.Checked && IsHit(YCoord, XCoord))
-            {
-                await Connection.SendToServerAsync(Settings.Default.UseFurni, LeverID, 0);
 
+                if (furniID == LeftID)
+                {
+                    furniDeviatedPosY = furniRealPosY - YDeviation;
+                    YCoord = furniDeviatedPosY;
+                    MainYLbl.Text = YCoord.ToString();
+                    UpdateColors("left", YCoord);
+                }
+
+                if (furniID == RightID)
+                {
+                    furniDeviatedPosX = furniRealPosX - XDeviation;
+                    XCoord = furniDeviatedPosX;
+                    MainXLbl.Text = XCoord.ToString();
+                    UpdateColors("right", XCoord);
+                }
+                if (WinBx.Checked && IsHit(XCoord, YCoord))
+                {
+                    await Connection.SendToServerAsync(Settings.Default.UseFurni, LeverID, 0);
+
+                    XCoord = 0;
+                    YCoord = 0;
+                    StopBot("Won game");
+                }
+                else if (LoseBx.Checked && !IsHit(XCoord, YCoord))
+                {
+                    await Connection.SendToServerAsync(Settings.Default.UseFurni, LeverID, 0);
+
+                    XCoord = 0;
+                    YCoord = 0;
+
+                    StopBot("Lost game");
+                }
+                else if (CustomHitBx.Checked && IsHit(XCoord, YCoord))
+                {
+                    await Connection.SendToServerAsync(Settings.Default.UseFurni, LeverID, 0);
+
+                    XCoord = 0;
+                    YCoord = 0;
+                    StopBot("Won game");
+                }
+
+                await Task.Delay(300);
                 XCoord = 0;
                 YCoord = 0;
-                StopBot("Won game");
             }
-            else if (LoseBx.Checked && !IsHit(YCoord, XCoord))
-            {
-                await Connection.SendToServerAsync(Settings.Default.UseFurni, LeverID, 0);
-
-                XCoord = 0;
-                YCoord = 0;
-
-                StopBot("Lost game");
-            }
-
-            await Task.Delay(300);
-            XCoord = 0;
-            YCoord = 0;
         }
 
         private void StartBtn_Click(object sender, EventArgs e)
@@ -262,7 +323,6 @@ namespace giopib
         {
             if (StartBtn.Enabled)
             {
-                Triggers.InAttach(Settings.Default.FurniMove, WiredMoveFurniture);
                 if (WinBx.Checked)
                     StatusBx.Text = "Running: Trying to win";
                 else if (LoseBx.Checked)
@@ -274,7 +334,6 @@ namespace giopib
 
         private void StopBot(string reason)
         {
-            Triggers.InDetach(Settings.Default.FurniMove);
             StatusBx.Text = $"Stopped: {reason}";
             Running = false;
         }
@@ -430,54 +489,9 @@ namespace giopib
         }
         #endregion
 
-        private async void CustomHitBx_CheckedChanged(object sender, EventArgs e)
+        private void CustomHitBx_CheckedChanged(object sender, EventArgs e)
         {
             CustomHit = CustomHitBx.Checked;
-            if (CustomHit)
-            {
-                if (CustomX == 0)
-                {
-                    if (!Running)
-                    {
-                        StatusBx.Text = "Waiting: Click a blue tile..";
-                        StartBtn.Enabled = false;
-                    }
-
-                    else
-                    {
-                        StopBot("No custom tile chosen");
-                        StartBtn.Enabled = false;
-                        await Task.Delay(5000);
-                        if (CustomHit)
-                            StatusBx.Text = "Waiting: Click a blue tile..";
-                    }
-                }
-                else
-                {
-                    if (!Running)
-                        StatusBx.Text = "Idle: Ready to hit custom spot";
-                    else StatusBx.Text = "Running: Trying to hit custom spot";
-                }
-                if (CustomHit)
-                {
-                    foreach (Panel p in HitPanels)
-                    {
-                        try
-                        {
-                            if (p != CustomPanel)
-                                p.BackColor = Color.RoyalBlue;
-                            else p.BackColor = Color.Khaki;
-                        }
-                        catch { }
-                    }
-                }
-            }
-            else
-            {
-                foreach (Panel p in HitPanels)
-                    p.BackColor = Color.Plum;
-                StartBtn.Enabled = true;
-            }
         }
 
         private void WinBx_CheckedChanged(object sender, EventArgs e)
@@ -506,11 +520,31 @@ namespace giopib
             Settings.Default.Reload();
         }
 
-        private void CreditsBtn_Click(object sender, EventArgs e)
+        private async void CreditsBtn_Click(object sender, EventArgs e)
         {
-            //The credits might be outdated, what about you just don't touch this form?!
-            CreditsForm f = new CreditsForm();
-            f.Show();
+            HMessage popup = new HMessage(Settings.Default.Alert);
+            popup.WriteString("gbot.credits_alert");
+            popup.WriteInteger(3);
+            popup.WriteString("image");
+            popup.WriteString("http://i1112.photobucket.com/albums/k495/MiksLawl123/coins_big_zpstpr2kjz0.gif");
+            popup.WriteString("title");
+            popup.WriteString($"GBot - Credits");
+            popup.WriteString("message");
+            popup.WriteString("<b>Sirjonasxx:</b> Being early with this and helping me with earlier stages of GBot long ago.<br>" +
+"<b>Wes:</b> For creating another earlier version of this bot. It was awesome!<br>" +
+"<b>SC-P(The group):</b> They know why.We were a huge success because of this.<br>" +
+"<b>Darkbox:</b> Because that's where it all started for me.<br>" + 
+"<b>Sulakore.com:</b> Because that's the coolest scripting forum! Go see it.<br>" +
+"<b>Arachis:</b> You da best dawg, I would be nothing without your endless help.");
+
+            await Connection.SendToClientAsync(popup.ToBytes());
+        }
+
+        private async void CustomBtn_Click(object sender, EventArgs e)
+        {
+            CForm.Show();
+            await Connection.SendToClientAsync(Settings.Default.Rank, 12, 12, true);
+            Triggers.OutAttach(Settings.Default.Rotate, FurnitureMoved); //Should update this
         }
     }
 }

@@ -46,5 +46,53 @@ namespace giopib.Properties {
                 this["UseFurni"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("1923")]
+        public ushort FurniLoad {
+            get {
+                return ((ushort)(this["FurniLoad"]));
+            }
+            set {
+                this["FurniLoad"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("1337")]
+        public ushort Alert {
+            get {
+                return ((ushort)(this["Alert"]));
+            }
+            set {
+                this["Alert"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("1338")]
+        public ushort Rotate {
+            get {
+                return ((ushort)(this["Rotate"]));
+            }
+            set {
+                this["Rotate"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("1339")]
+        public ushort Rank {
+            get {
+                return ((ushort)(this["Rank"]));
+            }
+            set {
+                this["Rank"] = value;
+            }
+        }
     }
 }

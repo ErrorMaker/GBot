@@ -8,10 +8,10 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("GBot")]
 [assembly: AssemblyDescription("Grijpers Owned!")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Mika")]
+[assembly: AssemblyCompany("Mika & Wes")]
 [assembly: AssemblyProduct("GBot")]
-[assembly: AssemblyCopyright("Copyright Mika ©  2016")]
-[assembly: AssemblyTrademark("Mika")]
+[assembly: AssemblyCopyright("Copyright Mika & Wes ©  2016")]
+[assembly: AssemblyTrademark("Mika & Wes")]
 [assembly: AssemblyCulture("")]
 
 // Setting ComVisible to false makes the types in this assembly not visible 
@@ -32,5 +32,5 @@ using System.Runtime.InteropServices;
 // You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("1.0.0.0")]
-[assembly: AssemblyFileVersion("1.0.0.0")]
+[assembly: AssemblyVersion("1.3.3.8")]
+[assembly: AssemblyFileVersion("1.3.3.8")]
