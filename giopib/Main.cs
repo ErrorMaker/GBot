@@ -173,6 +173,15 @@ namespace giopib
 
             GGames.Add(gg3);
 
+            GGame gg4 = new GGame("Pretpark Left");
+            gg4.LeftID = 135507063;
+            gg4.RightID = 21849627;
+            gg4.LeverID = 241124139;
+            gg4.XDeviation = 10;
+            gg4.YDeviation = 3;
+
+            GGames.Add(gg4);
+
             foreach (GGame g in GGames)
             {
                 RoomsBx.Items.Add(g.ToString());
